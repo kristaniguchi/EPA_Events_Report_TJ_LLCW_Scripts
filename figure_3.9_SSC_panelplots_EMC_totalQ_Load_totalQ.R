@@ -1,4 +1,4 @@
-#Figure 3.7 in EPA Events Report, SSC plots
+#Figure 3.9 in EPA Events Report, SSC plots
 #Script written by Kris Taniguchi, SDSU (kristaniguchi@gmail.com)
 #2 Panel plot of EMC vs. total Q and Load vs. total Q
 
