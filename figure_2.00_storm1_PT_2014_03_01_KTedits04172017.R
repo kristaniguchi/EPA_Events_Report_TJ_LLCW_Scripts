@@ -1,5 +1,5 @@
 #Storm Event 1: 3/2014 
-#Figure 2 in Events Report for EPA
+#Figure 2.1 in Events Report for EPA
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 #KT updated using IBWC stage and rating curve, manning's n 0.013
 #3 storm events (E1-E3)

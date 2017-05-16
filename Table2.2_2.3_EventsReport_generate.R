@@ -3,18 +3,26 @@
 #table generated from each event script, pull summary data from each script and put into table
 #table1 contains both ibwc and PT summary data, table2 contains the usable observed data (A ratings)
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
+dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory to where the scripts are saved!
 setwd(dir)
 
 ###############################################################################################################
 
-#list files in the directory
-script.dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017/GitHub/"
-flist = list.files(script.dir)
+#list all the storm event files
+flist = c("figure_2.0_storm1_PT_2014_03_01_KTedits04172017.R", 
+      "figure_2.03_storm2_PT_2015_03_01_KTedits04202017.R", 
+      "figure_2.05_storm3_PT_2015_05_15_KTedits04202017.R",
+      "figure_2.07_storm4_PT_2015_09_15_KTedits04202017.R" ,        
+      "figure_2.09_storm5_PT_2016_01_04_KTedits04172017.R" ,
+      "figure_2.11_storm6_PT_2016_03b_KTedits04172017.R" ,          
+      "figure_2.13_storm7_PT_2016_04_KTedits04172017.R",
+      "figure_2.14_storm8_IBWC_Visual_2017_01_KTedits04172017.R",  
+      "figure_2.15_storm9_IBWC_visual_2017_02_KTedits05012017.R",
+      "figure_2.16_storm10_IBWC_visual_2017_0227_KTedits05012017.R")
 
 ###############################################################################################################
 
-#Loop to run each R events script and pull out the appropriate tables: obs.summary.PT.IBWC and obs.summary
+#Loop to run each R events script and pull out the summary tables: obs.summary.PT.IBWC and obs.summary
 
 summary.out.PT.IBWC = data.frame(matrix(nrow=1, ncol=8)) #empty dataframe to put the values in from obs.summary.PT.IBWC
   names(summary.out.PT.IBWC) <- c("date", "total.precip.mm", "PT.peak.q.obs.cms", "IBWC.peak.q.obs.cms", "PT.total.q.obs.mm", "IBWC.total.q.obs.mm", "event", "source")

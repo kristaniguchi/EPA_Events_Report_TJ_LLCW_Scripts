@@ -4,7 +4,7 @@
 #where the top width and bottom width may vary for larger depths (because trapezoidal xsa)
 calculateR <- function(stage.m) {
   
-  geom.data0 = read.csv("F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017/PT_xs_188.6771.csv",header=TRUE,sep=",") #cross section distance and elevation for PT xs
+  geom.data0 = read.csv("PT_xs_188.6771.csv",header=TRUE,sep=",") #cross section distance and elevation for PT xs
   stage.m.xs = geom.data0$elevation - min(geom.data0$elevation) #to get the relative elevation to the bed elevation (or the depth of the water instead of absolution elevation)
   geom.data = cbind(geom.data0, stage.m.xs)
   

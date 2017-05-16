@@ -3,7 +3,8 @@
   #arrows showing elevation of HOR and GC gages
 #Created by Kris Taniguchi(SDSU, kristaniguchi@gmail.com)
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this data directory
+#dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this data directory
+dir = "C:/Users/Kris/Documents/GitHub/EPA_Events_Report_TJ_LLCW_Data" #update this data directory
 setwd(dir)
 
 ###############################################################################################################

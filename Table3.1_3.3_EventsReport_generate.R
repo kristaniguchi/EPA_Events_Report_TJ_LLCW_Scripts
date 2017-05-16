@@ -7,10 +7,13 @@ setwd(dir)
 
 ###############################################################################################################
 
-#list files in the directory
-script.dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017/GitHub_SSC/"
-flist = list.files(script.dir)
-
+#list all of the SSC scripts
+flist2 = c("Figure_3.2_EventsReport_SSC_03012014.R",
+          "Figure_3.3_EventsReport_SSC_03012015.R",
+          "Figure_3.4_EventsReport_SSC_05152015.R",
+          "Figure_3.5_EventsReport_SSC_03062016.R",
+          "Figure_3.6_EventsReport_SSC_02172017.R",
+          "Figure_3.7_EventsReport_SSC_02272017.R")
 ###############################################################################################################
 
 #Loop to run each R events script and pull out the appropriate tables: obs.summary.PT.IBWC and obs.summary

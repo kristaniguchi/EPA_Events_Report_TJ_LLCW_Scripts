@@ -2,10 +2,8 @@
 #Trap efficiency
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 
-#to read in PT data, read in barometric data, subtract to get water depth (sections 1-4)
 dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
 setwd(dir)
-dir.concepts.main = "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/AGNPS_files_no_sed_limit_07252016/Main_sed_01192017_20062012_newmodel_upstreamwt0" #for CONCEPTS output summary from Main
 
 ###############################################################################################################
 
@@ -21,8 +19,7 @@ fall.vel.m.s = (((1636*(particle.data$particle_density_kg_m3-density.water)*part
   
 ########################################################################################################################
 #Critical Velocity of sed basin #this will be calculated for every day Vc = Qi/A
-  #main = read.table("C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/AGNPS_files_baseflow_eddy_5_16_16_sedlim15000_1/Main_sed_08092016_20062012/TimeSeries_01.txt",skip = 9,header = FALSE) #update this to concepts timeseries output at outlet!
-fname = paste(dir.concepts.main, "/", "TimeSeries_01.txt", sep ="")
+fname = "TimeSeries_01.txt" #this file was taken from "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/AGNPS_files_no_sed_limit_07252016/Main_sed_01192017_20062012_newmodel_upstreamwt0" #for CONCEPTS output summary from Main
 main = read.table(fname,skip = 9,header = FALSE) #update this to concepts timeseries output at outlet!
 names(main)<- c("DATE", 
                 "TIME",
@@ -47,17 +44,19 @@ month.day.year = format(date.time, "%m/%d/%Y")
 main2 = cbind(main, date.time, month, month.day, year, month.day.year, time)
 
 #add up all the baseflows and subtract that amt from the Q
-  setwd("C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/trib_files_baseflow_updated_5_16_2016") #edit this line
-  all  = list.files("C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/trib_files_baseflow_updated")
-  fname = NA
-  baseflowtxt = NA
+#ln 50-60 ignore, it added up all the baseflow values set for concepts input trib files, this total value is 0.133 cms
+  #setwd("C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/trib_files_baseflow_updated_5_16_2016") #edit this line
+  #all  = list.files("C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/trib_files_baseflow_updated_5_16_2016")
+  #fname = NA
+  #baseflowtxt = NA
   
-  for (i in 1: length(all)) {
-    z = readLines(all[i])
-    fname[i] = all[i]
-    baseflowtxt[i] = z[3]  
-    }
-  baseflow.sum = sum(as.numeric(baseflowtxt))  #0.133
+  #for (i in 1: length(all)) {
+    #z = readLines(all[i])
+    #fname[i] = all[i]
+    #baseflowtxt[i] = z[3]  
+    #}
+  #baseflow.sum = sum(as.numeric(baseflowtxt))  #0.133
+  baseflow.sum = 0.133 
   adj.q.cms = main2$DISCHARGE.cms - baseflow.sum #the corrected discharge
   adj.q.cms2 = adj.q.cms-0 #don't need extra adjust
   adj.q.cms2[adj.q.cms2<0] <- 0 #set all negative values to 0
