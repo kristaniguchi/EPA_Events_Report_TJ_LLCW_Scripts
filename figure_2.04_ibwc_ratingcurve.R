@@ -1,9 +1,10 @@
-#Figure 2.x (?)
+#Figure 2.4
 #IBWC Updated Rating Curve
 #Using storm 10: 2/27/2017 event: camera discharge vs. IBWC bubbler stage
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 #Read in IBWC and field camera data
@@ -61,8 +62,7 @@ legend("topleft", c("Rising Limb","Falling Limb"), pch=c(1,16), col=c("blue","re
 #Calculate IBWC discharge using original rating curve (just for comparison)
 
 #discharge llc, n 0.013
-path.name.calcQ.mannings = paste(dir, "/", "function_calc_Q_mannings.R", sep="")
-source(path.name.calcQ.mannings)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_Q_mannings.R') #functions are saved in script directory
 Q.llc.0.013 = calculateQ.mannings(llc$stage, 0.013)
 
 #Original IBWC RATING CURVE: discharge ibwc using orig rating curve for comparison to camera discharge
@@ -84,8 +84,7 @@ obs.vel.llc = cbind(obs.vel.llc0, obs.vel.adj, date.time, date, time)
 stage.vel.llc.m = data.frame(approx(llc$date.time, as.numeric(as.character(llc$stage)), obs.vel.llc$date.time)) 
 
 #Calculate hydraulic radius and flow area for observed discharge calculation
-path.name.calc.hydradius = paste(dir, "/", "function_calc_hyd_radius.R", sep="")
-source(path.name.calc.hydradius)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_hyd_radius.R') #functions are saved in script directory
 R.obs = data.frame(calculateR(stage.vel.llc.m$y )) #to get hyd radius and flow area m2
 obs.Q.llc = obs.vel.adj* R.obs$area.m2 #q=va (manning's equation)
 
@@ -155,9 +154,10 @@ ibwc.Q.cms.adj.rating.falling = falling.ibwc$ibwc.stage.m*a+b
 ibwc.Q.cms.adj.rating.falling[ibwc.Q.cms.adj.rating.falling<0]<-0
 #Cbind rising and falling IBWC discharge new
 ibwc.Q.cms.adjusted = c(ibwc.Q.cms.adj.rating.rising,ibwc.Q.cms.adj.rating.falling)
+ibwc.date.time = c(rising.ibwc$date.time, falling.ibwc$date.time)
 
 ###############################################################################################################
-#Figure 2.xx
+#Figure 2.4
 
 #Plot of ibwc stage v. camera discharge, sep by rising and falling limb
 plot(ibwc.stage.m, approx.llc_q_ibwc[,2], main="Rating Curve", xlab="IBWC Stage (m)", ylab="LLCW Discharge (cms)", type="p")

@@ -1,11 +1,11 @@
 #Storm Event 7: 4/2016 
 #PT didn't work for this storm, IBWC Q is zero for this storm!
-#Figure x in Events Report for EPA
+#Figure 2.17 in Events Report for EPA
 #rained from 2016-03-05 to 2015-03-11
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
-dir.concepts.main = "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/Main_flow_05182016" #for CONCEPTS output summary from Main
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 
@@ -87,8 +87,7 @@ plot(approx.tje.naval$x, stage.m, type="l",  xlab = "Date", ylab = "Stage (m)", 
 axis.POSIXct(side = 1, approx.tje.naval$x, format = "%Y-%m-%d")
 
 #calculate Q
-path.name.calcQ.mannings = paste(dir, "/", "function_calc_Q_mannings.R", sep="")
-source(path.name.calcQ.mannings)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_Q_mannings.R') #functions are saved in script directory
 q.cms = calculateQ.mannings(stage.m, 0.013) #calc q based on PT stage using 0.013 n
 
 #plot Q timeseries 
@@ -97,8 +96,7 @@ axis.POSIXct(side = 1, obs$date.time, format = "%Y-%m-%d")
 
 #calculate peak q and total q in mm for whole storm 
 peakq.cms = max(q.cms, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_total_Q_mm.R ') #functions are saved in script directory
 total.q.mm = calculate.total.Q.mm(q.cms, obs$date.time) 
 mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
 
@@ -108,19 +106,6 @@ mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
 par(oma=c(2,2,2,2))
 plot(obs$date.time, q.cms, type ="l", xlab = "Date", ylab = "Discharge (cms)", xaxt = "n",xlim = c(as.POSIXct(obs$date.time[1]),as.POSIXct("2016-03-09 00:00:00 PST")))
 axis.POSIXct(side = 1, obs$date.time, format = "%Y-%m-%d")
-#abline(v=as.POSIXct("2016-03-06 09:40", format="%Y-%m-%d %H:%M"))
-#abline(v=as.POSIXct("2016-03-06 12:00", format="%Y-%m-%d %H:%M"))
-#abline(v=as.POSIXct("2016-03-06 15:45", format="%Y-%m-%d %H:%M"))
-#abline(v=as.POSIXct("2016-03-07 06:00", format="%Y-%m-%d %H:%M"))
-#abline(v=as.POSIXct("2016-03-07 07:00", format="%Y-%m-%d %H:%M"))
-#abline(v=as.POSIXct("2016-03-07 12:00", format="%Y-%m-%d %H:%M"))
-par(new=T)
-plot(dates.ssc,x.ssc$g.l,yaxt="n",xlim=c(as.POSIXct(obs$date.time[1]),as.POSIXct("2016-03-09 00:00:00 PST")),xlab="",ylab="",pch=20,cex=2)
-axis(side=4)
-mtext("SSC g/l",side = 4, line = 3)
-
-#tabla con valores de Q                                                         << ==== NAPO ====== >>>
-write.csv(data.frame(obs$date.time, q.cms), file = "q_data_march2016.csv",row.names=FALSE, na="")
 
 ###############################################################################################################
 
@@ -165,7 +150,7 @@ plot(ibwc.4$date.time, ibwc.Q.cms.adjusted, type="l")
 
 ###############################################################################################################
 
-#FIGRUE 8 
+#FIGRUE 2.17 
 #Overall Panel Plots of everything
 layout(matrix(1:2, ncol = 1), widths = 1, heights = c(0.05,0.05), respect = FALSE)
 par(mar = c(0, 4.1, 0, 2.1)) #set margins for bottom, L, top, R
@@ -195,8 +180,7 @@ peak.q.obs.cms = NA
 total.q.obs.mm = NA
 total.precip.mm = NA
 obs.summary = cbind(date, total.precip.mm, peak.q.obs.cms, total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv = paste(dir, "/", "summary_20160409_observed_q.csv", sep="")
-write.csv(obs.summary, file=fpathcsv, row.names=F)
+write.csv(obs.summary, file="summary_20160409_observed_q.csv", row.names=F)
 
 #output summary for both PT and IBWC data! Use date, event, source, 
 PT.peak.q.obs.cms = NA
@@ -204,6 +188,5 @@ IBWC.peak.q.obs.cms = NA
 PT.total.q.obs.mm = NA
 IBWC.total.q.obs.mm = NA
 obs.summary.PT.IBWC = cbind(date, total.precip.mm, PT.peak.q.obs.cms, IBWC.peak.q.obs.cms, PT.total.q.obs.mm, IBWC.total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv2 = paste(dir, "/", "summary_20160409_observed_q_PT_IBWC.csv", sep="")
-write.csv(obs.summary.PT.IBWC, file=fpathcsv2, row.names=F)
+write.csv(obs.summary.PT.IBWC, file="summary_20160409_observed_q_PT_IBWC.csv", row.names=F)
 

@@ -1,13 +1,13 @@
 #Storm Event x: 1/2017
-#Figure x in Events Report for EPA
+#Figure 2.18 in Events Report for EPA
 #PT did not work during event, comparison of visuals with IBWC
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 #KT updated using IBWC stage and rating curve, manning's n 0.013 --> use PT for this event
 #2 storm events: USE PT DATA for E1, IBWC E2
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
-dir.concepts.main = "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/Main_flow_05182016" #for CONCEPTS output summary from Main
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 #PT didnt' work, use IBWC data
@@ -88,6 +88,7 @@ ibwc.Q.cms.adjusted = c(ibwc.Q.cms.adj.rating.rising1,ibwc.Q.cms.adj.rating.fall
 plot(ibwc.4$date.time, ibwc.Q.cms.adjusted, type="l")
 
 ###############################################################################################################
+#Figure 2.18
 #IBWC Overall Panel Plots of everything
 layout(matrix(1:4, ncol = 1), widths = 1, heights = c(0.05,0.05,0.04,0.015), respect = FALSE)
 par(mar = c(0, 4.1, 0, 2.1)) #set margins for bottom, L, top, R
@@ -114,8 +115,7 @@ abline(v=as.POSIXct("2017-01-20 02:30", format="%Y-%m-%d %H:%M"),lty=1)
 legend("topleft", "C)", bty="n", cex=1.5, inset=c(-.03,-.085)) #inset first value is L-R, second is up-down
 #add in q pt from the visual stage at outlet
 visual.stage= c(0.7,0.4,0.3)
-path.name.calcQmannings = paste(dir, "/", "function_calc_Q_mannings.R", sep="")
-source(path.name.calcQmannings)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_Q_mannings.R') #functions are saved in script directory
 visual.q.calc = calculateQ.mannings(visual.stage, 0.013)
 points(as.POSIXct("2017-01-20 09:30", format="%Y-%m-%d %H:%M"), visual.q.calc[1], pch=8) #visual stage outlet
 points(as.POSIXct("2017-01-23 16:00", format="%Y-%m-%d %H:%M"), visual.q.calc[2], pch=8) #visual stage outlet
@@ -166,8 +166,7 @@ ind.end1 = grep(as.POSIXct("2017-01-20 01:59:58"),ibwc.4$date.time)
 event1.q.cms.ibwc = ibwc.Q.cms.adjusted[1:ind.end1] #new subset for the first E1 event
 event1.date.time.ibwc = ibwc.4$date.time[1:ind.end1]
 peakq.event1.ibwc = max(event1.q.cms.ibwc, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_total_Q_mm.R ') #functions are saved in script directory
 total.q.mm.1.ibwc = calculate.total.Q.mm(event1.q.cms.ibwc, event1.date.time.ibwc)
 runoff.coeff.event1.ibwc = total.q.mm.1.ibwc/totalp.event1.ibwc
 
@@ -217,8 +216,7 @@ peak.q.obs.cms = c(peakq.event1.ibwc,peakq.event2.ibwc)
 total.q.obs.mm = c(total.q.mm.1.ibwc,total.q.mm.2.ibwc)
 total.precip.mm = c(totalp.event1.ibwc, totalp.event2.ibwc)
 obs.summary = cbind(date, total.precip.mm, peak.q.obs.cms, total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv = paste(dir, "/", "summary_20170119_observed_q.csv", sep="")
-write.csv(obs.summary, file=fpathcsv, row.names=F)
+write.csv(obs.summary, file="summary_20170119_observed_q.csv", row.names=F)
 
 #output summary for both PT and IBWC data! Use date, event, source, 
 PT.peak.q.obs.cms = c(NA,NA)
@@ -226,12 +224,7 @@ IBWC.peak.q.obs.cms = c(peakq.event1.ibwc,peakq.event2.ibwc)
 PT.total.q.obs.mm = c(NA,NA)
 IBWC.total.q.obs.mm = c(total.q.mm.1.ibwc,total.q.mm.2.ibwc)
 obs.summary.PT.IBWC = cbind(date, total.precip.mm, PT.peak.q.obs.cms, IBWC.peak.q.obs.cms, PT.total.q.obs.mm, IBWC.total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv2 = paste(dir, "/", "summary_20170119_observed_q_PT_IBWC.csv", sep="")
-write.csv(obs.summary.PT.IBWC, file=fpathcsv2, row.names=F)
-
-
-
-#4/27/2018: NEED TO UPDATE PART BELOW, only had 1 event previously, now have 2.  
+write.csv(obs.summary.PT.IBWC, file="summary_20170119_observed_q_PT_IBWC.csv", row.names=F)
 
 ##############################################################################################################################
 

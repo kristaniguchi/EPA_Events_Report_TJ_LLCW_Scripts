@@ -1,12 +1,12 @@
 #Storm Event 9: 02172017
-#Figure xx in Events Report for EPA
+#Figure 2.19 in Events Report for EPA
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 #KT updated using IBWC stage and rating curve, manning's n 0.013 --> use PT for this event
 #E1 USE IBWC; PT did not function correctly during this event!
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
-dir.concepts.main = "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/Main_flow_05182016" #for CONCEPTS output summary from Main
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 #Read in barometric and PT data, do atm correction
@@ -73,14 +73,12 @@ plot(obs$date.time, stage.m, type="l",  xlab = "Date", ylab = "Stage (m)", xaxt 
 axis.POSIXct(side = 1, obs$date.time, format = "%Y-%m-%d")
 
 #calculate Q
-path.name.calcQ.mannings = paste(dir, "/", "function_calc_Q_mannings.R", sep="")
-source(path.name.calcQ.mannings)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_Q_mannings.R') #functions are saved in script directory
 q.cms = calculateQ.mannings(stage.m, 0.013) #calc q based on PT stage using 0.013 n
 
 #calculate peak q and total q in mm for whole storm 
 peakq.cms = max(q.cms, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_total_Q_mm.R ') #functions are saved in script directory
 total.q.mm = calculate.total.Q.mm(q.cms, obs$date.time) 
 mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
 
@@ -188,7 +186,7 @@ plot(precip00$date.time, precip00$Cumulative.rain.mm, type="l")
 
 ###############################################################################################################
 
-#FIGRUE 2
+#FIGRUE 2.19
 #Overall Panel Plots of everything
 layout(matrix(1:4, ncol = 1), widths = 1, heights = c(0.05,0.05,0.04,0.05), respect = FALSE)
 par(mar = c(0, 4.1, 0, 2.1)) #set margins for bottom, L, top, R
@@ -278,8 +276,6 @@ ind.end1 = grep(as.POSIXct("2017-02-18 12:59:50"),sub.ibwc$date.time)
 event1.q.cms.ibwc = q.cms.rating.0.013[ind.start1:ind.end1] #new subset for the first E1 event
 event1.date.time.ibwc = sub.ibwc$date.time[ind.start1:ind.end1]
 peakq.event1.ibwc = max(event1.q.cms.ibwc, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
 total.q.mm.1.ibwc = calculate.total.Q.mm(event1.q.cms.ibwc, event1.date.time.ibwc)
 runoff.coeff.event1.ibwc = total.q.mm.1.ibwc/totalp.event1.ibwc
 
@@ -311,8 +307,7 @@ peak.q.obs.cms = c(peakq.event1.ibwc)
 total.q.obs.mm = c(total.q.mm.1.ibwc)
 total.precip.mm = c(totalp.event1.ibwc)
 obs.summary = cbind(date, total.precip.mm, peak.q.obs.cms, total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv = paste(dir, "/", "summary_20170218_observed_q.csv", sep="")
-write.csv(obs.summary, file=fpathcsv, row.names=F)
+write.csv(obs.summary, file="summary_20170218_observed_q.csv", row.names=F)
 
 #output summary for both PT and IBWC data! Use date, event, source, 
 PT.peak.q.obs.cms = c(peakq.event1)
@@ -320,11 +315,6 @@ IBWC.peak.q.obs.cms = c(peakq.event1.ibwc)
 PT.total.q.obs.mm = c(total.q.mm.1)
 IBWC.total.q.obs.mm = c(total.q.mm.1.ibwc)
 obs.summary.PT.IBWC = cbind(date, total.precip.mm, PT.peak.q.obs.cms, IBWC.peak.q.obs.cms, PT.total.q.obs.mm, IBWC.total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv2 = paste(dir, "/", "summary_20170218_observed_q_PT_IBWC.csv", sep="")
-write.csv(obs.summary.PT.IBWC, file=fpathcsv2, row.names=F)
-
-
-
-#4/27/2018: NEED TO UPDATE PART BELOW, only had 2 events previously, now have 3.  Also, using IBWC data for E2, E3, so need to use diff data for comparison (data above)
+write.csv(obs.summary.PT.IBWC, file="summary_20170218_observed_q_PT_IBWC.csv", row.names=F)
 
 ##############################################################################################################################

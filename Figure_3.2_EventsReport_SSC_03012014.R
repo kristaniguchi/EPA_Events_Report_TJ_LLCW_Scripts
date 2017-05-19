@@ -3,15 +3,14 @@
 #Summary data for Table 3.1 and 3.3
 #Napoleon Gudino (CICESE) wrote original SSC calculations part of script, Kris Taniguchi (SDSU) reformatted and updated script
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
-evt.script = "figure_2.0_storm1_PT_2014_03_01_KTedits04172017.R"
-evt.script.dir = paste(dir, "/GitHub/", evt.script, sep= "") #path for event script
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 
-#Run the events report script for storm 1 (figure_2.0_PT_2014_03_01_KTedits04172017.R) to get the appropriate Q, stage, etc.
-source(evt.script.dir)
+#Run the events report script for storm 1 (figure_2.02_PT_2014_03_01_KTedits04172017.R) to get the appropriate Q, stage, etc.
+source("../EPA_Events_Report_TJ_LLCW_Scripts/figure_2.02_storm1_PT_2014_03_01_KTedits04172017.R")
 
 #Dataframe q.data.all is the usable observed data (timeseries of all the good data)
 names(q.data.all)

@@ -5,7 +5,7 @@
 
 #Set working directory to the data folder, script directory will be used if sourcing functions 
 getwd() #the directory where the script is saved 
-setwd('./EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 

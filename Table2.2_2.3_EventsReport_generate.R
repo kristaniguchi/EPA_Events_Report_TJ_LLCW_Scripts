@@ -3,22 +3,23 @@
 #table generated from each event script, pull summary data from each script and put into table
 #table1 contains both ibwc and PT summary data, table2 contains the usable observed data (A ratings)
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory to where the scripts are saved!
-setwd(dir)
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
+script.dir= '../EPA_Events_Report_TJ_LLCW_Scripts/' #directory where scripts are saved
 
 ###############################################################################################################
 
-#list all the storm event files
-flist = c("figure_2.0_storm1_PT_2014_03_01_KTedits04172017.R", 
-      "figure_2.03_storm2_PT_2015_03_01_KTedits04202017.R", 
-      "figure_2.05_storm3_PT_2015_05_15_KTedits04202017.R",
-      "figure_2.07_storm4_PT_2015_09_15_KTedits04202017.R" ,        
-      "figure_2.09_storm5_PT_2016_01_04_KTedits04172017.R" ,
-      "figure_2.11_storm6_PT_2016_03b_KTedits04172017.R" ,          
-      "figure_2.13_storm7_PT_2016_04_KTedits04172017.R",
-      "figure_2.14_storm8_IBWC_Visual_2017_01_KTedits04172017.R",  
-      "figure_2.15_storm9_IBWC_visual_2017_02_KTedits05012017.R",
-      "figure_2.16_storm10_IBWC_visual_2017_0227_KTedits05012017.R")
+#list all the storm event files except       "figure_2.17_storm7_PT_2016_04_KTedits04172017.R" (no observations)
+flist = c("figure_2.02_storm1_PT_2014_03_01_KTedits04172017.R", 
+      "figure_2.07_storm2_PT_2015_03_01_KTedits04202017.R", 
+      "figure_2.09_storm3_PT_2015_05_15_KTedits04202017.R",
+      "figure_2.11_storm4_PT_2015_09_15_KTedits04202017.R" ,        
+      "figure_2.13_storm5_PT_2016_01_04_KTedits04172017.R" ,
+      "figure_2.15_storm6_PT_2016_03b_KTedits04172017.R" ,          
+      "figure_2.18_storm8_IBWC_Visual_2017_01_KTedits04172017.R",  
+      "figure_2.19_storm9_IBWC_visual_2017_02_KTedits05012017.R",
+      "figure_2.20_storm10_IBWC_visual_2017_0227_KTedits05012017.R")
 
 ###############################################################################################################
 

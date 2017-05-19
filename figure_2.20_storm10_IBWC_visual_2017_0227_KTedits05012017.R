@@ -1,17 +1,18 @@
 #Storm event 10: 2/27/2017
 #ibwc and llc outlet comparison (stage,velocity, discharge)
-#Figure xx in Events Report for EPA
+#Figure 2.20 in Events Report for EPA
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 #KT updated using IBWC stage and rating curve, manning's n 0.013 --> use PT for this event
 #1 event: IBWC and Field Camera data --> use field camera and 0.013 n
 #IWBC Rating curve developed from this EVENT
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
-#Run R script 
-source("figure_2.3_ibwc_ratingcurve.R")
+#Run R script from IBWC rating curve script(has observed data that needs to be loaded onto here)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/figure_2.04_ibwc_ratingcurve.R') #functions are saved in script directory
 
 ###############################################################################################################
 
@@ -25,7 +26,7 @@ precip00 = cbind(precip0, date.time, date, time)
 
 plot(precip00$date.time, precip00$Cumulative.rain.mm, type="l")
 ###############################################################################################################
-#Figure 2.16
+#Figure 2.20
 #IBWC Overall Panel Plots of everything
 layout(matrix(1:3, ncol = 1), widths = 1, heights = c(0.03,0.05,0.05), respect = FALSE)
 par(mar = c(0, 4.1, 0, 2.1)) #set margins for bottom, L, top, R
@@ -56,8 +57,7 @@ dev.off() #to reset back to one plot
 #calculate peak q and total q in mm for whole storm 1
 total.p.mm.camera = precip0$Cumulative.rain.mm[length(precip0$Cumulative.rain.mm)]
 peakq.cms.camera = max(Q.llc.0.013, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_total_Q_mm.R ') #functions are saved in script directory
 total.q.mm.camera = calculate.total.Q.mm(Q.llc.0.013, llc$date.time)
 
 #CAMERA total P, total q, peakq
@@ -104,8 +104,7 @@ peak.q.obs.cms = c(peakq.cms.camera)
 total.q.obs.mm = c(total.q.mm.camera)
 total.precip.mm = c(total.p.mm.camera)
 obs.summary = cbind(date, total.precip.mm, peak.q.obs.cms, total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv = paste(dir, "/", "summary_20170227_observed_q.csv", sep="")
-write.csv(obs.summary, file=fpathcsv, row.names=F)
+write.csv(obs.summary, file="summary_20170227_observed_q.csv", row.names=F)
 
 #output summary for both PT and IBWC data! Use date, event, source, 
 PT.peak.q.obs.cms = c(peakq.cms.camera)
@@ -114,8 +113,7 @@ PT.total.q.obs.mm = c(total.q.mm.camera)
 IBWC.total.q.obs.mm = c(total.q.mm.ibwc)
 total.precip.mm = total.p.mm.camera
 obs.summary.PT.IBWC = cbind(date, total.precip.mm, PT.peak.q.obs.cms, IBWC.peak.q.obs.cms, PT.total.q.obs.mm, IBWC.total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv2 = paste(dir, "/", "summary_20170227_observed_q_PT_IBWC.csv", sep="")
-write.csv(obs.summary.PT.IBWC, file=fpathcsv2, row.names=F)
+write.csv(obs.summary.PT.IBWC, file="summary_20170227_observed_q_PT_IBWC.csv", row.names=F)
 
 
 

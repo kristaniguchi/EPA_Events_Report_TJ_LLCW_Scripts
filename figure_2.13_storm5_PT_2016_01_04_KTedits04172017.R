@@ -1,12 +1,12 @@
 #Storm Event 5: 1/2016
-#Figure 6 in Events Report for EPA
+#Figure 2.13 in Events Report for EPA
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 #KT updated using IBWC stage and rating curve, manning's n 0.013 --> use PT for this event
 #1 storm event (E1)
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
-dir.concepts.main = "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/Main_flow_05182016" #for CONCEPTS output summary from Main
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 
@@ -113,8 +113,7 @@ plot(approx.tje.naval$x, stage.m, type="l",  xlab = "Date", ylab = "Stage (m)", 
 axis.POSIXct(side = 1, approx.tje.naval$x, format = "%Y-%m-%d")
 
 #calculate Q
-path.name.calcQ.mannings = paste(dir, "/", "function_calc_Q_mannings.R", sep="")
-source(path.name.calcQ.mannings)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_Q_mannings.R') #functions are saved in script directory
 q.cms = calculateQ.mannings(stage.m, 0.013) #calc q based on PT stage using 0.013 n
 
 #plot Q timeseries 
@@ -123,8 +122,7 @@ axis.POSIXct(side = 1, obs$date.time, format = "%Y-%m-%d")
 
 #calculate peak q and total q in mm for whole storm 
 peakq.cms = max(q.cms, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_total_Q_mm.R ') #functions are saved in script directory
 total.q.mm = calculate.total.Q.mm(q.cms, obs$date.time) 
 mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
 peak.stage.m = max(stage.m, na.rm= TRUE)
@@ -175,38 +173,7 @@ ibwc.Q.cms.adjusted = c(ibwc.Q.cms.adj.rating.rising,ibwc.Q.cms.adj.rating.falli
 plot(ibwc.4$date.time, ibwc.Q.cms.adjusted, type="l")
 
 ###############################################################################################################
-#Panel Plots --> Use 2nd one!
-
-#1. ORIGINAL FIGURE 5
-#FIGRUE 2
-#Overall Panel Plots of everything
-layout(matrix(1:4, ncol = 1), widths = 1, heights = c(0.05,0.05,0.04,0.05), respect = FALSE)
-par(mar = c(0, 4.1, 0, 2.1)) #set margins for bottom, L, top, R
-plot(precip$date.time, precip$Cumulative.rain.mm, type="l", xaxt = 'n', ylab="Cum. Rain (mm)", xlim = c(as.POSIXct(obs$date.time[1]),as.POSIXct(obs$date.time[1440]))) 
-legend("topleft", "A)", bty="n", cex=1.5, inset=c(-.09,-.15))
-abline(v=as.POSIXct("2016-01-05 09:18", format="%Y-%m-%d %H:%M"),lty=2)
-abline(v=as.POSIXct("2016-01-05 17:33", format="%Y-%m-%d %H:%M"),lty=2)
-par(mar = c(0, 4.1, 0, 2.1))
-plot(obs$date.time, obs$PT, type="l", col="blue", xaxt = 'n', ylab = "Pressure (m)")#,  ylim=c(10.2,10.45+.01))
-lines(approx.tje.naval$x, pressure.tje.naval.m.approx,type="l", col="green")
-lines(approx.tje.naval$x, tje.naval.adj, type = "l", col="green")
-legend("topleft", c("TJE","TJE Naval","PT"),  col=c("red","green","blue"),lwd=1, inset=c(.1,-.05), cex=0.75,bty = "n" ) #bty="n" means no box
-legend("topleft", "B)", bty="n", cex=1.5, inset=c(-.09,-.15))
-abline(v=as.POSIXct("2016-01-05 09:18", format="%Y-%m-%d %H:%M"),lty=2)
-abline(v=as.POSIXct("2016-01-05 17:33", format="%Y-%m-%d %H:%M"),lty=2)
-par(mar = c(0, 4.1, 0, 2.1))
-plot(approx.tje.naval$x, stage.m,  type="l",  xaxt = 'n',   ylab = "Stage (m)")
-legend("topleft", "C)", bty="n", cex=1.5, inset=c(-.09,-.2))
-abline(v=as.POSIXct("2016-01-05 09:18", format="%Y-%m-%d %H:%M"),lty=2)
-abline(v=as.POSIXct("2016-01-05 17:33", format="%Y-%m-%d %H:%M"),lty=2)
-par(mar = c(4, 4.1, 0, 2.1))
-plot(obs$date.time, q.cms, type ="l", xlab = "Date",ylab = "Discharge (cms)", xaxt = 'n')
-axis.POSIXct(side = 1, obs$date.time, format = "%Y-%m-%d")
-legend("topleft", "D)", bty="n", cex=1.5, inset=c(-.09,-.4))
-abline(v=as.POSIXct("2016-01-05 09:18", format="%Y-%m-%d %H:%M"),lty=2)
-abline(v=as.POSIXct("2016-01-05 17:33", format="%Y-%m-%d %H:%M"),lty=2)
-
-
+#Figure 2.13
 #IBWC Overall Panel Plots of everything - Updated atm 04/20/2017
 layout(matrix(1:4, ncol = 1), widths = 1, heights = c(0.05,0.05,0.04,0.05), respect = FALSE)
 par(mar = c(0, 4.1, 0, 2.1)) #set margins for bottom, L, top, R
@@ -362,8 +329,7 @@ peak.q.obs.cms = c(peakq.event1)
 total.q.obs.mm = c(total.q.mm.1)
 total.precip.mm = c(totalp.event1)
 obs.summary = cbind(date, total.precip.mm, peak.q.obs.cms, total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv = paste(dir, "/", "summary_20160105_observed_q.csv", sep="")
-write.csv(obs.summary, file=fpathcsv, row.names=F)
+write.csv(obs.summary, file="summary_20160105_observed_q.csv", row.names=F)
 
 #output summary for both PT and IBWC data! Use date, event, source,
 PT.peak.q.obs.cms = c(peakq.event1)
@@ -371,8 +337,7 @@ IBWC.peak.q.obs.cms = c(peakq.event1.ibwc)
 PT.total.q.obs.mm = c(total.q.mm.1)
 IBWC.total.q.obs.mm = c(total.q.mm.1.ibwc)
 obs.summary.PT.IBWC = cbind(date, total.precip.mm, PT.peak.q.obs.cms, IBWC.peak.q.obs.cms, PT.total.q.obs.mm, IBWC.total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv2 = paste(dir, "/", "summary_20160105_observed_q_PT_IBWC.csv", sep="")
-write.csv(obs.summary.PT.IBWC, file=fpathcsv2, row.names=F)
+write.csv(obs.summary.PT.IBWC, file="summary_20160105_observed_q_PT_IBWC.csv", row.names=F)
 
 
 ##############################################################################################################################
@@ -404,50 +369,3 @@ cum.rain.new.mm = cumsum(agg$x) #cumulative rainfall mm
 date.time.new = agg$Group.1 #the new date time in 6 minute intervals
 
 ##############################################################################################################################
-#For the Main channel outlet timeseries in CONCEPTS Summary 
-#f.concepts = paste(dir.concepts.main, "/", "TimeSeries_01.txt", sep="")
-#setwd(f.concepts) 
-
-#main = read.table("TimeSeries_01.txt",skip = 9,header = FALSE)
-#names(main)<- c("DATE", 
-                #"TIME",
-                #"DISCHARGE.cms", 
-                #"VELOCITY.ms",   
-                #"DEPTH.m"     ,
-                #"STAGE.m"     ,
-                #"AREA.m2"    ,
-                #"TOP WIDTH.m2", 
-                #"PERIMETER.m" , 
-               # "RADIUS.m",
-                #"CONVEYANCE","F.SLOPE","HEAD","FROUDE","BEDSHEAR","SILTDIS","SANDDIS","GRAVELDIS","TOTALDIS","SILTYLD","SANDYLD","GRAVELYLD","TOTALYLD","CUMBED","THALWEG","CUMLAT","SAFETYL","SAFETYR_APCOHL_APCOHR_POREL_PORER","MATRICL","MATRICR","WBLKL","WBLKR","WWATERL","WWATERR","HYDPRL","HYDPRR","PHREAL","PHREAR","BANKTOPL","BANKTOPR")
-                #"CONVEYANCE","F.SLOPE","HEAD","FROUDE","BEDSHEAR")
-
-#date.time0 = paste(as.character(main$DATE), as.character(main$TIME), sep = " ")
-#time = strptime(as.character(main$TIME),"%H:%M:%S")
-#date.time = strptime(date.time0,"%m/%d/%Y %H:%M:%S")
-#month = as.numeric(format(date.time, "%m"))
-#month.day = format(date.time, "%m/%d")
-#year = format(date.time, "%Y")
-#month.day.year = format(date.time, "%m/%d/%Y")
-#min.q = min(main$DISCHARGE.cms) #check to see what the minimum value is in concepts timeseries, is it diff than baseflow.sum?
-#q.adjusted.cms = main$DISCHARGE.cms - 0.133 #0.133 is the baseflow sum to be subtracted out
-#main2 = cbind(main, date.time, month, month.day, year, month.day.year, time, q.adjusted.cms)
-
-#CONCEPTS hydrograph in comparison with Observed: 01/05/16
-#sub = main2[main2$month.day.year=="01/05/2016",]
-#peakq.concepts1 = max(sub$q.adjusted.cms)
-#peak.depth = max(sub$DEPTH.m)
-#peak.concepts.ind = which(sub$q.adjusted.cms==peakq.concepts1)
-#peak.concepts.date.time1 = sub$date.time[peak.concepts.ind]
-#time.2.peak.concepts.e1 = peak.concepts.date.time1 - sub$date.time[1] #time to peak concepts
-
-#plot(obs$date.time, q.cms, type="l", main="01/05/16", xlab="Time", ylab="Discharge (cms)", xlim = c(as.POSIXct("2016-01-05 00:00:00"),as.POSIXct("2016-01-06 00:00:00")))
-#lines(sub$date.time, sub$q.adjusted.cms, type="l", xlab = "Time (hrs)", ylab = "Discharge (cms)", main = "2/28/14 E1", col="blue")
-#legend("topleft", c("Observed","CONCEPTS"),  col=c("black","blue"),lwd=1, cex=0.75,bty = "n" ) #bty="n" means no box
-
-
-
-
-
-
-

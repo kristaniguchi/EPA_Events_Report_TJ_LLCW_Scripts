@@ -5,9 +5,9 @@
 #1 storm event (E1)
 #SSC sample collected
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
-dir.concepts.main = "C:/Users/Kris/Documents/GitHub/Dissertation/AGNPS/Napo_4_4_16/cc/Main_flow_05182016" #for CONCEPTS output summary from Main
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 
@@ -113,14 +113,12 @@ plot(approx.tje.naval$x, stage.m, type="l",  xlab = "Date", ylab = "Stage (m)", 
 axis.POSIXct(side = 1, approx.tje.naval$x, format = "%Y-%m-%d")
 
 #calculate Q
-path.name.calcQ.mannings = paste(dir, "/", "function_calc_Q_mannings.R", sep="")
-source(path.name.calcQ.mannings)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_Q_mannings.R') #functions are saved in script directory
 q.cms = calculateQ.mannings(stage.m, 0.013) #calc q based on PT stage using 0.013 n
 
 #calculate peak q and total q in mm for whole storm 
 peakq.cms = max(q.cms, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
+source('../EPA_Events_Report_TJ_LLCW_Scripts/function_calc_total_Q_mm.R ') #functions are saved in script directory
 total.q.mm = calculate.total.Q.mm(q.cms, obs$date.time) 
 mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
 
@@ -192,8 +190,6 @@ precip_20150915 = precip1$Cumulative.rain.mm[length(precip1$date)] - precip_2015
 #calculate peak q and total q in mm for whole storm
 totalp.event1 = precip_20150915
 peakq.cms = max(q.cms, na.rm = TRUE) 
-path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
-source(path.name.calctotalQ)
 total.q.mm = calculate.total.Q.mm(q.cms, obs$date.time) 
 mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
 #zoom plot of event to look for oscillations
@@ -218,7 +214,6 @@ source = rep("PT", times=length(q.cms))
 #OUTPUT discharge timeseries for A rating only! (this case, PT data)
 q.data.all = cbind(date.time2, q.cms, stage.m, source, Event)
 names(q.data.all) <- c("date.time", "q.cms", "source", "event")
-#write.csv(data, file="F:/TJ/Validation_data/Google_drive/processed_data/20150515_discharge_timeseries.csv",row.names=F)
 
 #output summary for observed data
 date = c("2015-05-15")
@@ -228,8 +223,7 @@ peak.q.obs.cms = c(peakq.cms)
 total.q.obs.mm = c(total.q.mm)
 total.precip.mm = c(totalp.event1)
 obs.summary = cbind(date, total.precip.mm, peak.q.obs.cms, total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv = paste(dir, "/", "summary_20150515_observed_q.csv", sep="")
-write.csv(obs.summary, file=fpathcsv, row.names=F)
+write.csv(obs.summary, file="summary_20150515_observed_q.csv", row.names=F)
 
 #output summary for both PT and IBWC data (No IBWC, will just put NA)! Use date, event, source, 
 PT.peak.q.obs.cms = peak.q.obs.cms
@@ -237,54 +231,4 @@ IBWC.peak.q.obs.cms = c(NA)
 PT.total.q.obs.mm = total.q.obs.mm
 IBWC.total.q.obs.mm = c(NA)
 obs.summary.PT.IBWC = cbind(date, total.precip.mm, PT.peak.q.obs.cms, IBWC.peak.q.obs.cms, PT.total.q.obs.mm, IBWC.total.q.obs.mm, event, source) #may want to add time to peak column
-fpathcsv2 = paste(dir, "/", "summary_20150515_observed_q_PT_IBWC.csv", sep="")
-write.csv(obs.summary.PT.IBWC, file=fpathcsv2, row.names=F)
-
-
-#4/27/2018: NEED TO UPDATE PART BELOW, only had 2 events previously, now have 3.  Also, using IBWC data for E2, E3, so need to use diff data for comparison (data above)
-
-##############################################################################################################################
-#For the Main channel outlet timeseries in CONCEPTS Summary 
-#f.concepts = paste(dir.concepts.main, "/", "TimeSeries_01.txt", sep="")
-#setwd(f.concepts) 
-
-#main = read.table("TimeSeries_01.txt",skip = 9,header = FALSE)
-#names(main)<- c("DATE", 
-                #"TIME",
-                #"DISCHARGE.cms", 
-                #"VELOCITY.ms",   
-                #"DEPTH.m"     ,
-                #"STAGE.m"     ,
-                #"AREA.m2"    ,
-                #"TOP WIDTH.m2", 
-                #"PERIMETER.m" , 
-                #"RADIUS.m",
-                ##"CONVEYANCE","F.SLOPE","HEAD","FROUDE","BEDSHEAR","SILTDIS","SANDDIS","GRAVELDIS","TOTALDIS","SILTYLD","SANDYLD","GRAVELYLD","TOTALYLD","CUMBED","THALWEG","CUMLAT","SAFETYL","SAFETYR_APCOHL_APCOHR_POREL_PORER","MATRICL","MATRICR","WBLKL","WBLKR","WWATERL","WWATERR","HYDPRL","HYDPRR","PHREAL","PHREAR","BANKTOPL","BANKTOPR")
-                #"CONVEYANCE","F.SLOPE","HEAD","FROUDE","BEDSHEAR")
-
-#date.time0 = paste(as.character(main$DATE), as.character(main$TIME), sep = " ")
-#time = strptime(as.character(main$TIME),"%H:%M:%S")
-#date.time = strptime(date.time0,"%m/%d/%Y %H:%M:%S")
-#month = as.numeric(format(date.time, "%m"))
-#month.day = format(date.time, "%m/%d")
-#year = format(date.time, "%Y")
-#month.day.year = format(date.time, "%m/%d/%Y")
-#min.q = min(main$DISCHARGE.cms) #check to see what the minimum value is in concepts timeseries, is it diff than baseflow.sum?
-#q.adjusted.cms = main$DISCHARGE.cms - 0.133 #0.133 is the baseflow sum to be subtracted out
-#main2 = cbind(main, date.time, month, month.day, year, month.day.year, time, q.adjusted.cms)
-
-#CONCEPTS hydrograph in comparison with Observed: 05/15/15
-#sub = main2[main2$month.day.year=="05/15/2015",]
-#peakq.concepts1 = max(sub$q.adjusted.cms)
-#peak.depth = max(sub$DEPTH.m)
-#peak.concepts.ind = which(sub$q.adjusted.cms==peakq.concepts1)
-#peak.concepts.date.time1 = sub$date.time[peak.concepts.ind]
-#time.2.peak.concepts.e1 = peak.concepts.date.time1 - sub$date.time[1] #time to peak concepts
-
-#plot(obs$date.time, q.cms, type="l", main="05/15/15", xlab="Time", ylab="Discharge (cms)")
-#lines(sub$date.time, sub$q.adjusted.cms, type="l", xlab = "Time (hrs)", ylab = "Discharge (cms)", main = "2/28/14 E1", col="blue")
-#legend("topright", c("Observed","CONCEPTS"),  col=c("black","blue"),lwd=1, cex=0.75,bty = "n" ) #bty="n" means no box
-
-
-
-
+write.csv(obs.summary.PT.IBWC, file="summary_20150515_observed_q_PT_IBWC.csv", row.names=F)

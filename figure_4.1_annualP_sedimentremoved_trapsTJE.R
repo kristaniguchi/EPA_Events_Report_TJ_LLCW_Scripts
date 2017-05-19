@@ -2,10 +2,9 @@
 #Script written by Kris Taniguchi, SDSU (kristaniguchi@gmail.com)
 
 
-dir = "C:/Users/Kris/Documents/GitHub/EPA_Events_Report_TJ_LLCW_Data" #folder containing the data
-setwd(dir) #set working directory to the data directory
-
-script.dir = "C:/Users/Kris/Documents/GitHub/EPA_Events_Report_TJ_LLCW_Scripts" #folder containing the scripts
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 #Read in the tables generated from Table2.1_cal_generate.R and all of the events scripts

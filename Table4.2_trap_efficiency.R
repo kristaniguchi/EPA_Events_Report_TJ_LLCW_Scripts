@@ -2,8 +2,9 @@
 #Trap efficiency
 #Script written by Kristine Taniguchi, SDSU (kristaniguchi@gmail.com)
 
-dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this directory
-setwd(dir)
+#Set working directory to the data folder, script directory will be used if sourcing functions
+getwd() #the directory where the script is saved
+setwd('../EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 
@@ -101,8 +102,7 @@ main2 = cbind(main, date.time, month, month.day, year, month.day.year, time)
   day = strptime(as.character(uniq.day),"%m/%d/%Y") #the day that matches with the Ei vectors
   year = as.numeric(format(day, "%Y"))
   month = as.numeric(format(day, "%m"))
-  function.file = paste(dir, "function_water_year.R", sep ="/")
-  source(function.file)
+  source('../EPA_Events_Report_TJ_LLCW_Scripts/function_water_year.R ') #functions are saved in script directory
   water.year = water.year(month,year) 
     check = cbind(month, year,water.year) #to check if water year is correct
   data.Ei = data.frame(cbind(water.year, Ei.msand1, Ei.fsand1, Ei.silt1, Ei.clay1, Ei.msand3, Ei.fsand3, Ei.silt3, Ei.clay3, Qi))
