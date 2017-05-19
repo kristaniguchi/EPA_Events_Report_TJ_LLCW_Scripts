@@ -142,7 +142,7 @@ legend("topright", c("Stage TJE", "Stage Baro", "Visual Stage","IBWC", "IBWC Adj
 
 #stage values from adjusted PT
 ibwc.stage.visual.approx = approx(ibwc2$date.time,ibwc.stage.m, visual.stage.date.time) 
-ibwc.q.visual.approx = approx(ibwc2$date.time,ibwc.q.cms, visual.stage.date.time) 
+ibwc.q.visual.approx = approx(sub.ibwc$date.time, q.cms.rating.0.013, visual.stage.date.time) 
 PT.stage.visual.approx = approx(obs$date.time, stage.m, visual.stage.date.time) 
 PT.q.visual.approx = approx(obs$date.time, q.cms, visual.stage.date.time) 
 

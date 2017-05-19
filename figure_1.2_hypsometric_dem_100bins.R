@@ -3,19 +3,20 @@
   #arrows showing elevation of HOR and GC gages
 #Created by Kris Taniguchi(SDSU, kristaniguchi@gmail.com)
 
-#dir = "F:/TJ/R/TJ/events_report/Napo_PT_Script_data_used_in_script_02232017" #update this data directory
-dir = "C:/Users/Kris/Documents/GitHub/EPA_Events_Report_TJ_LLCW_Data" #update this data directory
-setwd(dir)
+#Set working directory to the data folder, script directory will be used if sourcing functions 
+getwd() #the directory where the script is saved 
+setwd('./EPA_Events_Report_TJ_LLCW_Data') #set working directory as the data folder, which is one folder back in it's own folder
 
 ###############################################################################################################
 
-#read in clipped DEM to wtshd boundary
+#Install packages/libraries
 install.packages('raster')
 install.packages('rgdal')
 library(raster)
 library(sp)
 library(rgdal)
-#grd <- readGDAL("demburn_clp.ovr")
+
+#read in clipped DEM to wtshd boundary
 grd2 <- raster("demburn_clp.ovr")
 grd2 <- setMinMax(grd2)
 crs(grd2) <- "+proj=utm +zone=11N  +datum=NAD83 +units=m +no_defs" #+ellps=GRS80
@@ -23,7 +24,6 @@ crs(grd2) <- "+proj=utm +zone=11N  +datum=NAD83 +units=m +no_defs" #+ellps=GRS80
 ###############################################################################################################
 
 #Step1: Reclassify clipped DEm into 100 elevation bins
-#source("F:/TJ/R/TJ/events_report/Rfiles")
 #function for hypsometric curve for watershed: reclassify DEM into 100 elevation bins (DEM must be clipped to watershed)
 WESSO<-function(DGM,Bin){
   min<-trunc(minValue(DGM))

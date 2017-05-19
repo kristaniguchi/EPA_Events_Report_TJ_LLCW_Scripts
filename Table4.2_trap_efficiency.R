@@ -101,7 +101,8 @@ main2 = cbind(main, date.time, month, month.day, year, month.day.year, time)
   day = strptime(as.character(uniq.day),"%m/%d/%Y") #the day that matches with the Ei vectors
   year = as.numeric(format(day, "%Y"))
   month = as.numeric(format(day, "%m"))
-  source("F:/TJ/R/TJ/events_report/Rfiles/function_water_year.R")
+  function.file = paste(dir, "function_water_year.R", sep ="/")
+  source(function.file)
   water.year = water.year(month,year) 
     check = cbind(month, year,water.year) #to check if water year is correct
   data.Ei = data.frame(cbind(water.year, Ei.msand1, Ei.fsand1, Ei.silt1, Ei.clay1, Ei.msand3, Ei.fsand3, Ei.silt3, Ei.clay3, Qi))
@@ -168,6 +169,9 @@ for (i in 1:7) { #starting with 2006-2012 excavation, where complete excavation
   wy = c(wy,wy0)
   }
 
+###############################################################################################################
+#Table 4.2:
+
 #round the tons removed to whole number, and the trap efficiency to 2 decimal places
 tons.rem.round = txtRound(as.matrix(cbind(mass.rem[2:length(size.class)],mass.rem.adj[2:length(size.class)])),0)
 Eann.round = txtRound(as.matrix(cbind( Eann1[2:length(size.class)], Eann3[2:length(size.class)])),2)
@@ -184,7 +188,8 @@ print(mytableout)
 
 table.export = data.frame(cbind(wy[2:length(wy)],table))
 names(table.export) <- c("Removal_WY_Date","Sed_size","Tons_removed_uncorrected","Eann_1", "Eann_3","Corrected_load_tons")
-write.csv(table.export,file= "F:/TJ/Validation_data/Google_drive/trap_efficiency/sediment_loads_2006_2012_corrected_uncorrected_02032017.csv")
+file.dir = paste(dir, "sediment_loads_2006_2012_corrected_uncorrected_05182017.csv", sep="/")
+write.csv(table.export,file= file.dir)
 
 
 #aggregate the fine and medium sand into one for tons removed and corrected loads (tons)
@@ -207,5 +212,5 @@ for (i in 1: length(unique.wy)) {
 
 sed.size.agg = c("NA", rep(c("sand","Silt", "Clay", "Total", "Total without Clay"), 7))
 summary.table = data.frame(cbind(wy.rep, sed.size.agg, Tons_removed_uncorrected_agg, Corrected_load_tons_agg ))
-write.csv(summary.table, file="F:/TJ/Validation_data/Google_drive/trap_efficiency/summary.table.2002.2012.aggsand.csv")
-  #FOR table 2.2 in AGNPS/CONCEPTS Callibration report! --> just copied and pasted values into that table
+file.summary.table = paste(dir, "summary.table.2002.2012.aggsand.csv", sep="/")
+write.csv(summary.table, file=file.summary.table)

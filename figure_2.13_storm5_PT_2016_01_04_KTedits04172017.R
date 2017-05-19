@@ -127,6 +127,7 @@ path.name.calctotalQ = paste(dir, "/", "function_calc_total_Q_mm.R", sep="")
 source(path.name.calctotalQ)
 total.q.mm = calculate.total.Q.mm(q.cms, obs$date.time) 
 mcm = (total.q.mm/1000*10231811.9)/1000000 #formula to calculate MCM
+peak.stage.m = max(stage.m, na.rm= TRUE)
 
 ###############################################################################################################
 
