@@ -13,8 +13,8 @@ table.3.1.ssc.all = read.csv("summary_table.3.1.csv") #table with both IBWC and 
 table.3.1.ssc = table.3.1.ssc.all[-c(3,8,10,17,21,23),]
 
 #set value columns to numeric, create new dataframe to run regression
-table.3.1.ssc[,2] <- as.numeric(as.character(table.3.1.ssc[,2]))
-table.3.1.ssc[,3] <- as.numeric(as.character(table.3.1.ssc[,3]))
+table.3.1.ssc[,2] <- as.numeric(as.character(table.3.1.ssc[,2])) #ssc raw
+table.3.1.ssc[,3] <- as.numeric(as.character(table.3.1.ssc[,3])) #instantaneous Q
 names(table.3.1.ssc) <- c("Date","SSC.g.L", "Q.cms", "Event")  #set column names       
 
 #Read in the tables generated from Table 3.3 (for second and third plot)
@@ -26,16 +26,18 @@ table.3.3.ssc[,3] <- as.numeric(as.character(table.3.3.ssc[,3]))
 table.3.3.ssc[,4] <- as.numeric(as.character(table.3.3.ssc[,4]))
 table.3.3.ssc[,5] <- as.numeric(as.character(table.3.3.ssc[,5]))
 table.3.3.ssc[,6] <- as.numeric(as.character(table.3.3.ssc[,6]))
-  names(table.3.3.ssc) <- c("event.date", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")  #set column names       
+table.3.3.ssc[,6] <- as.numeric(as.character(table.3.3.ssc[,7]))
+
+  names(table.3.3.ssc) <- c("event.date", "peak.q.cms", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")  #set column names       
 
 ###############################################################################################################
 #Regression equation for raw ssc and instantaneous q relationship
-rawq.ssc.model = lm(SSC.g.L ~ Q.cms, table.3.1.ssc) 
+rawq.ssc.model = lm(log10(SSC.g.L) ~ log10(Q.cms), table.3.1.ssc) #log-log
 summary(rawq.ssc.model)
 b = as.numeric(rawq.ssc.model$coefficients[1]) #y-int
 a = as.numeric(rawq.ssc.model$coefficients[2]) #slope
-x.num = c(0.1, 50)
-y.num =  a*x.num+b         
+x.num = c(0.01, 50)
+y.num =  (10^b)*(x.num^a)         #y = 10^b*x^a , y = 10.81*x^0.32
 reg.q.rawSSC = data.frame(cbind(x.num, y.num))
   
 #Regression equation for Q-Event mean ssc (EMC) relationship
@@ -53,7 +55,7 @@ summary(q.load.model)
 b = as.numeric(q.load.model$coefficients[1]) #y-int
 a = as.numeric(q.load.model$coefficients[2]) #slope
 x.num = c(0.1, 50)
-y.num =  (10^b)*(x.num^a)         #y = 10^b*x^a , y = 51.47*x^1.52
+y.num =  (10^b)*(x.num^a)         #y = 10^b*x^a , y = 51.61*x^1.52
 reg.q.load = data.frame(cbind(x.num, y.num))
 
 ###############################################################################################################
@@ -62,15 +64,18 @@ reg.q.load = data.frame(cbind(x.num, y.num))
 #3 Panel plots for SSC
 layout(matrix(1:3, ncol = 1), widths = 2, respect = FALSE)
 par(mar = c(4, 4.1, 0, 0.1)) #set margins for bottom, L, top, R
-plot(as.numeric(table.3.1.ssc$Q.cms), as.numeric(table.3.1.ssc$SSC.g.L),  pch=16, cex = 1.5, ylab="Grab Sample SSC (g/L)", xlab = "Instantaneous Q (cms)")
+plot(as.numeric(table.3.1.ssc$Q.cms), as.numeric(table.3.1.ssc$SSC.g.L), log="xy", pch=16, cex = 1.5, ylab="Grab Sample SSC (g/L)", xlab = "Instantaneous Q (cms)")
+lines(reg.q.rawSSC$x.num, reg.q.rawSSC$y.num)
+  text.eq1 = expression("y = 10.81"~ x^{0.32}) #equation text to be added to plot
+  text(3.5, 2.5, text.eq1, cex=1.5) #add equation to 
 par(mar = c(4, 4.1, 1, 0.1)) #set margins for bottom, L, top, R
 plot(as.numeric(table.3.3.ssc$total.q.mm), as.numeric(table.3.3.ssc$EMC), log="xy", pch=16, cex = 1.5, ylab="Event-mean SSC (g/L)", xlab = "Total Q (mm)")
 lines(reg.q.EMC$x.num, reg.q.EMC$y.num)
-  text.eq1 = expression("y = 4.77"~ x^{0.45}) #equation text to be added to plot
-  text(20, 10, text.eq1) #add equation to 
+  text.eq2 = expression("y = 4.77"~ x^{0.45}) #equation text to be added to plot
+  text(30, 5, text.eq2, cex=1.5) #add equation to 
 par(mar = c(4, 4.1, 1, 0.1)) #set margins for bottom, L, top, R
 plot(as.numeric(table.3.3.ssc$total.q.mm), as.numeric(table.3.3.ssc$load.ton), log="xy", pch=16, cex = 1.5,ylab="Suspended Sediment Load (tons)", xlab = "Total Q (mm)")
 lines(reg.q.load$x.num, reg.q.load$y.num)
-  text.eq2 = expression("y = 51.47"~ x^{1.52}) #equation text to be added to plot
-text(20, 2000, text.eq2)
+  text.eq3 = expression("y = 51.61"~ x^{1.52}) #equation text to be added to plot
+text(30, 1000, text.eq3, cex=1.5)
 

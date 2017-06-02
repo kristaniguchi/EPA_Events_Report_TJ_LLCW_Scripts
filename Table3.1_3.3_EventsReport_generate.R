@@ -22,8 +22,8 @@ flist2 = c("Figure_3.2_EventsReport_SSC_03012014.R",
 
 table.3.1.out = data.frame(matrix(nrow=1, ncol=4)) #empty dataframe to put the values in from obs.summary.PT.IBWC
 names(table.3.1.out) <- c("Date", "SSC (g/L)", "Q (cms)", "Event")
-table.3.3.out =  data.frame(matrix(nrow=1, ncol=6))
-names(table.3.3.out) <- c("event.date", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
+table.3.3.out =  data.frame(matrix(nrow=1, ncol=7))
+names(table.3.3.out) <- c("event.date", "peak.q.cms", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
 Storm.out = NA
 
 for (i in 1:length(flist2)) {
@@ -42,7 +42,7 @@ for (i in 1:length(flist2)) {
 table.3.1 = table.3.1.out[2:length(table.3.1.out$Date),]
 names(table.3.1) <- c("Date", "SSC (g/L)", "Q (cms)", "Event")
 table.3.3 = table.3.3.out[2:length(table.3.3.out$event.date),]
-names(table.3.3) <- c("event.date", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
+names(table.3.3) <- c("event.date", "peak.q.cms", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
 
 Storm.out = Storm.out[2:length(Storm.out)]
 

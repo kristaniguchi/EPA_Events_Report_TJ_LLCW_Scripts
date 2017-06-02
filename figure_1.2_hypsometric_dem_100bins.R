@@ -77,8 +77,10 @@ cum.freq.wtshd = data$cum_area_km2/(max(data$cum_area_km2))
 plot(data$TO_elevm, cum.freq.wtshd, type="p", xlab = "Elevation (m)", ylab = "Cumulative fraction of the watershed area")
 arrows(27.457, .2, 27.457, .06, length = 0.1, code = 2, col = par("fg"), lty = par("lty"),lwd = par("lwd"))
 arrows(174.283707, .6, 174.283707, .48, length = 0.1, code = 2, col = par("fg"), lty = par("lty"),lwd = par("lwd"))
-legend("topleft", "GC", bty="n", cex=1, inset=c(-.028,.63)) #inset L-R, up-down
-legend("topleft", "HM", bty="n", cex=1, inset=c(.43,.26)) #inset L-R, up-down
+arrows(40, .2, 40, .06, length = 0.1, code = 2, col = par("fg"), lty = par("lty"),lwd = par("lwd"))
+legend("topleft", "GC", bty="n", cex=1, inset=c(0.0098,.68)) #inset L-R, up-down
+legend("topleft", "HM", bty="n", cex=1, inset=c(.49,.3)) #inset L-R, up-down
+legend("topleft", "SG", bty="n", cex=1, inset=c(0.07,.68)) #inset L-R, up-down
 
 ###############################################################################################################
 

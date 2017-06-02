@@ -18,13 +18,14 @@ library(htmlTable)
 #Create dataframes, make sure all classes of numeric are set for rounding values
 table.3.3.ssc.df = data.frame(table.3.3.ssc)
 #Round the values 
-round1 = txtRound(table.3.3.ssc.df[,2:6],2) #round the numeric columns
-round2 = round(table.3.3.ssc.df[,3],0)
-round3 = round(table.3.3.ssc.df[,4],1)
-#load.round = signif(table.3.3.ssc.df[,4], 3)
+round1 = txtRound(table.3.3.ssc.df[,2:7],2) #round the numeric columns
+round2 = round(table.3.3.ssc.df[,4],0)
+round3 = round(table.3.3.ssc.df[,5],1)
+#Column of n number of SSC samples
+n.ssc = c(1,1,3,1,1,3,3,3,1)
 
-table.3.3.final = data.frame(cbind(as.character(table.3.3.ssc.df[,1]), round1[,1], round2, round3, round1[,4], round1[,5]))
-names(table.3.3.final) <- c("Event Date*", "Total Q (mm) ", "Total Q (m3)", "Load (tons)", "Volume weighted mean concentration (g/L)", "EMC")
+table.3.3.final = data.frame(cbind(as.character(table.3.3.ssc.df[,1]), n.ssc,  round1[,1], round1[,2], round2, round3, round1[,5], round1[,6]))
+names(table.3.3.final) <- c("Event Date*", "n SSC Samples", "Peak Q", "Total Q (mm) ", "Total Q (m3)", "Load (tons)", "Volume weighted mean concentration (g/L)", "EMC")
 #set the text columns as as.character
 table.3.3.final[,1] <- as.character(table.3.3.final[,1])
 table.3.3.final[,2] <- as.character(table.3.3.final[,2]) 
@@ -32,12 +33,14 @@ table.3.3.final[,3] <- as.character(table.3.3.final[,3])
 table.3.3.final[,4] <- as.character(table.3.3.final[,4])
 table.3.3.final[,5] <- as.character(table.3.3.final[,5])
 table.3.3.final[,6] <- as.character(table.3.3.final[,6])
+table.3.3.final[,7] <- as.character(table.3.3.final[,7])
+table.3.3.final[,8] <- as.character(table.3.3.final[,8])
 
 table.3.3.SSC.tableout = htmlTable(table.3.3.final, 
                                    rnames = rep("", times=length(table.3.3.ssc.df[,1])), #no row names
-                                   header = c("", "mm", "m3", "tons", "g/L", "g/L"),
-                                   cgroup = c("Event Date*", "Total Q", "Load", "Volume weighted mean concentration", "Event Mean Concentration"), 
-                                   n.cgroup = c(1, 2, 1, 1,1),
+                                   header = c("", "SSC Samples", "cms", "mm", "m3", "tons", "g/L", "g/L"),
+                                   cgroup = c("Event Date*", "n", "Peak Q", "Total Q", "Load", "Volume weighted mean concentration", "Event mean concentration"), 
+                                   n.cgroup = c(1, 1,1,2, 1, 1,1),
                                    caption="Table 3.3.  Total event suspended sediment load at the PT location for the events with SSC data. Drainage area is 10.23 km2 at the observation point.")
 print(table.3.3.SSC.tableout)
 

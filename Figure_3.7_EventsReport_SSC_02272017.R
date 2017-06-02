@@ -66,17 +66,18 @@ VWM = ssc*match.data/match.data #in this case, only 1 SSC ssample for E1, VWM= S
 EMC = ssc
 
 #Load = total q (m3) * VWM (g/L) * 1000L/1 m3 * 1e-6 tonne/g 
-#samples taken during E2 and E3, do not need E1 data for total.q.m3  
+#samples taken during E1
 total.q.m3 = total.q.obs.mm/1000*10230000 #convert to m, multiply by 10.23 km2 wtshd area or 10230000 m2
 load.g = VWM*total.q.m3*1000 #1000L = 1m3
 load.ton = load.g * 1e-6 #1 gram = 1e-6 ton
+peak.q.obs.cms
 
 #for table 3.3:
 date = obs.summary[,1] 
-event = obs.summary[,5] #second and third event
+event = obs.summary[,5] 
 date.event = paste(date, event, sep=" ")
-table.3.3.export = data.frame(cbind(date.event, total.q.obs.mm, total.q.m3, load.ton, VWM, EMC)) 
-names(table.3.3.export) <- c("event.date", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
+table.3.3.export = data.frame(cbind(date.event, peak.q.obs.cms, total.q.obs.mm, total.q.m3, load.ton, VWM, EMC)) 
+names(table.3.3.export) <- c("event.date", "peak.q.cms", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
 
 
 

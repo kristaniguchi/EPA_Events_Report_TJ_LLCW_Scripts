@@ -20,6 +20,7 @@ table.3.1.ssc.df = data.frame(table.3.1.ssc)
 #Round the values 
 round1 = txtRound(table.3.1.ssc.df[,2:3],2) #round the numeric columns
 
+
 table.3.1.final = data.frame(cbind(as.character(table.3.1.ssc.df[,1]), round1[,1], round1[,2], as.character(table.3.1.ssc.df[,4])))
 names(table.3.1.final) <- c("Date", "SSC (g/L)", "Q (cms)", "Event")
 #set the text columns as as.character

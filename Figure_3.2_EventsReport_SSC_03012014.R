@@ -79,10 +79,11 @@ EMC = ssc #only  one sample per event, event mean concentration = SSC
 total.q.m3 = total.q.obs.mm[2:3]/1000*10230000 #convert to m, multiply by 10.23 km2 wtshd area or 10230000 m2
 load.g = VWM*total.q.m3*1000 #1000L = 1m3
 load.ton = load.g * 1e-6 #1 gram = 1e-6 ton
+peak.q.obs.cms[2:3] #peak q from E2 and E3
 
 #for table 3.3:
 date = obs.summary[2:3,1] #second and third event
 event = obs.summary[2:3,5] #second and third event
 date.event = paste(date, event, sep=" ")
-table.3.3.export = data.frame(cbind(date.event, total.q.obs.mm[2:3], total.q.m3, load.ton, VWM, EMC)) 
-names(table.3.3.export) <- c("event.date", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
+table.3.3.export = data.frame(cbind(date.event, peak.q.obs.cms[2:3], total.q.obs.mm[2:3], total.q.m3, load.ton, VWM, EMC)) 
+names(table.3.3.export) <- c("event.date", "peak.q.cms", "total.q.mm", "total.q.m3", "load.ton", "VWM", "EMC")
